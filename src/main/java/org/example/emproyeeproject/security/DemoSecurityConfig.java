@@ -20,6 +20,14 @@ public class DemoSecurityConfig {
     // add support for JDBC ... no more hardcore users
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
+
+        userDetailsManager
+                .setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+
+        userDetailsManager
+                .setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?");
+
         return new JdbcUserDetailsManager(dataSource);
     }
 
